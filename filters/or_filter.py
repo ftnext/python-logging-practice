@@ -17,6 +17,17 @@ def main():
     libB_fabulous()
 
 
+class OrFilter:
+    def __init__(self, *prefixes: str):
+        self.prefixes = list(prefixes)
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        for prefix in self.prefixes:
+            if record.name.startswith(prefix):
+                return True
+        return False
+
+
 if __name__ == "__main__":
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
@@ -26,8 +37,7 @@ if __name__ == "__main__":
             "%(asctime)s | %(levelname)s | %(name)s:%(funcName)s:%(lineno)d - %(message)s"
         )
     )
-    stream_handler.addFilter(logging.Filter("libA"))
-    stream_handler.addFilter(logging.Filter("libB"))
+    stream_handler.addFilter(OrFilter("libA", "libB"))
     root_logger.addHandler(stream_handler)
 
     main()
