@@ -1,4 +1,12 @@
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#     "happy-python-logging",
+# ]
+# ///
 import logging
+
+from happy_python_logging.lib.filters import OrFilter
 
 libA_logger = logging.getLogger("libA")
 libB_logger = logging.getLogger("libB")
@@ -15,17 +23,6 @@ def libB_fabulous():
 def main():
     libA_awesome()
     libB_fabulous()
-
-
-class OrFilter:
-    def __init__(self, *prefixes: str):
-        self.prefixes = list(prefixes)
-
-    def filter(self, record: logging.LogRecord) -> bool:
-        for prefix in self.prefixes:
-            if record.name.startswith(prefix):
-                return True
-        return False
 
 
 if __name__ == "__main__":
